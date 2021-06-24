@@ -27,6 +27,7 @@ public class Game extends Canvas implements Runnable  {
 	public static int PyawVel = 0;
 	public static int PpitchVel = 0;
 	public static int FOV = 120;
+	public static double sprint = 1;
 	public static boolean paused = false;
 	
 	int centerX = Game.FRAME_WIDTH/2;

@@ -9,7 +9,7 @@ public class Handler { //steps through all the game objects and updates them ind
 	int count = 0;
 	
 	public void tick() {
-		Game.Pyaw = Game.Pyaw - Game.PyawVel;
+		Game.Pyaw = (int) (Game.Pyaw - (Game.PyawVel * Game.sprint));
 		
 		if(Game.Pyaw >= 360) {
 			Game.Pyaw = Game.Pyaw - 360;
@@ -17,7 +17,7 @@ public class Handler { //steps through all the game objects and updates them ind
 			Game.Pyaw = Game.Pyaw + 360;
 		}
 		
-		Game.Ppitch = Game.Ppitch + Game.PpitchVel;
+		Game.Ppitch = (int) (Game.Ppitch + (Game.PpitchVel * Game.sprint));
 		
 		if(Game.Ppitch >= 360) {
 			Game.Ppitch = Game.Ppitch -360;
@@ -39,9 +39,9 @@ public class Handler { //steps through all the game objects and updates them ind
 		//modVelY = modVelY - (Math.cos(Math.toRadians(-Game.Ppitch)) * Game.PvelY);
 		
 		
-		Game.playerX = (int) (Game.playerX + modVelX);//Game.PvelX;
-		Game.playerY = Game.playerY + Game.PvelY;
-		Game.playerZ = (int) (Game.playerZ + modVelZ);//Game.PvelZ;
+		Game.playerX = (int) (Game.playerX + (modVelX * Game.sprint));//Game.PvelX;
+		Game.playerY = (int) (Game.playerY + (Game.PvelY * Game.sprint));
+		Game.playerZ = (int) (Game.playerZ + (modVelZ * Game.sprint));//Game.PvelZ;
 		
 		
 		for(int i = 0; i < object.size(); i++) {
