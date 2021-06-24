@@ -9,7 +9,7 @@ public class Handler { //steps through all the game objects and updates them ind
 	int count = 0;
 	
 	public void tick() {
-		Game.Pyaw = Game.Pyaw + Game.PyawVel;
+		Game.Pyaw = Game.Pyaw - Game.PyawVel;
 		
 		if(Game.Pyaw >= 360) {
 			Game.Pyaw = Game.Pyaw - 360;
@@ -25,23 +25,23 @@ public class Handler { //steps through all the game objects and updates them ind
 			Game.Ppitch = Game.Ppitch + 360;
 		}
 		
-		/*		
-		double modVelZ = Math.cos(Math.toRadians(Game.Pyaw)) * Game.PvelZ;
-		double modVelX = Math.sin(Math.toRadians(Game.Pyaw)) * Game.PvelZ;
+				
+		double modVelZ = Math.sin(Math.toRadians(90) + Math.toRadians(Game.Pyaw)) * Game.PvelZ;
+		double modVelX = Math.cos(Math.toRadians(90) + Math.toRadians(Game.Pyaw)) * Game.PvelZ;
 		
-		modVelZ = modVelZ + (Math.sin(Math.toRadians(Game.Pyaw)) * Game.PvelX);
-		modVelX = modVelX + (Math.cos(Math.toRadians(Game.Pyaw)) * Game.PvelX);
+		modVelZ = modVelZ + (Math.cos(Math.toRadians(90) - Math.toRadians(Game.Pyaw)) * Game.PvelX);
+		modVelX = modVelX + (Math.sin(Math.toRadians(90) - Math.toRadians(Game.Pyaw)) * Game.PvelX);
 
-		double modVelY = Math.sin(Math.toRadians(Game.Ppitch)) * modVelZ;
-		modVelZ = Math.cos(Math.toRadians(Game.Pyaw)) * modVelZ;
+		//double modVelY = Math.sin(Math.toRadians(Game.Ppitch)) * modVelZ;
+		//modVelZ = Math.cos(Math.toRadians(Game.Pyaw)) * modVelZ;
 		
-		modVelZ = modVelZ + (Math.sin(Math.toRadians(-Game.Ppitch)) * Game.PvelY);
-		modVelY = modVelY - (Math.cos(Math.toRadians(-Game.Ppitch)) * Game.PvelY);*/
+		//modVelZ = modVelZ + (Math.sin(Math.toRadians(-Game.Ppitch)) * Game.PvelY);
+		//modVelY = modVelY - (Math.cos(Math.toRadians(-Game.Ppitch)) * Game.PvelY);
 		
 		
-		Game.playerX = Game.playerX + Game.PvelX;
+		Game.playerX = (int) (Game.playerX + modVelX);//Game.PvelX;
 		Game.playerY = Game.playerY + Game.PvelY;
-		Game.playerZ = Game.playerZ + Game.PvelZ;
+		Game.playerZ = (int) (Game.playerZ + modVelZ);//Game.PvelZ;
 		
 		
 		for(int i = 0; i < object.size(); i++) {

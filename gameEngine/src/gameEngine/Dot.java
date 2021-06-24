@@ -3,22 +3,20 @@ package gameEngine;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Point extends GameObject {
+public class Dot extends GameObject {
 
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
 	Color color;
 	
-	public Point(int x, int y, int z, Color color){
+	public Dot(int x, int y, int z, Color color){
 		super(x, y, z);
 		this.color = color;
 	}
 	
 	@Override
 	public void tick() {
-		//x = x - velX;
-		//y = y - velY;	
-		//z = z - velZ;
+
 	}
 
 	@Override
@@ -26,7 +24,7 @@ public class Point extends GameObject {
 		g.setColor(color);
 		
 		double distXN = x - Game.playerX;
-		double distYN = y - Game.playerY;
+		double distYN = Game.playerY - y;
 		double distZN = z - Game.playerZ;
 		
 		int[] pair = modValuesYaw(distXN, distZN);

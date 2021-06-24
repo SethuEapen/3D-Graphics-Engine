@@ -12,10 +12,12 @@ public class Game extends Canvas implements Runnable  {
 	 * 
 	 */
 	private static final long serialVersionUID = 3997796135074783199L;
-	public static final int FRAME_WIDTH = 900, FRAME_HEIGHT = 600; 
+	public static final int FRAME_WIDTH = 1800, FRAME_HEIGHT = 900; 
 	
-	public static int playerX = FRAME_WIDTH/2;
-	public static int playerY = FRAME_HEIGHT/2;
+	public static int monitorX = 1920/2;
+	public static int monitorY = 1080/2;
+	public static int playerX = 0;
+	public static int playerY = 0;
 	public static int playerZ = 0;
 	public static int PvelX = 0;
 	public static int PvelY = 0;
@@ -25,6 +27,7 @@ public class Game extends Canvas implements Runnable  {
 	public static int PyawVel = 0;
 	public static int PpitchVel = 0;
 	public static int FOV = 120;
+	public static boolean paused = false;
 	
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
@@ -35,9 +38,12 @@ public class Game extends Canvas implements Runnable  {
 
 	
 	public Game() {
-		new Window(FRAME_WIDTH, FRAME_HEIGHT, "BlockSim", this);
+		Window window = new Window(FRAME_WIDTH, FRAME_HEIGHT, "BlockSim", this);
 		handler = new Handler();
 		this.addKeyListener(new KeyInput(handler));
+		
+		//MouseInput mouseInput = new MouseInput(handler, window);
+		//this.addMouseMotionListener(mouseInput);
 		//handler.addObject(new Box(50, 50, 50));
 		//handler.addObject(new Box(400, 200, 15, 70));
 		drawStuff();
@@ -52,10 +58,10 @@ public class Game extends Canvas implements Runnable  {
 	}
 	
 	public void drawStuff() {
-		for(int x = 0; x < FRAME_WIDTH; x = x + 50) {
+		for(int x = 0; x < 500; x = x + 50) {
 			for(int z = 0; z < 1000; z = z + 50) {
-				for(int y = 0; y < FRAME_HEIGHT; y = y + 50) {
-					handler.addObject(new Point(x, y, z, Color.red));
+				for(int y = 0; y < 300; y = y + 50) {
+					handler.addObject(new Dot(x, y, z, Color.red));
 				}
 			}
 		}
