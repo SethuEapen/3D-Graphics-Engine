@@ -7,7 +7,16 @@ public class Dot extends GameObject {
 
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
+	
 	Color color;
+	
+	double distXN;
+	double distYN;
+	double distZN;
+	
+	int distX;
+	int distY;
+	int distZ;
 	
 	public Dot(int x, int y, int z, Color color){
 		super(x, y, z);
@@ -16,34 +25,36 @@ public class Dot extends GameObject {
 	
 	@Override
 	public void tick() {
-
+		distXN = x - Game.playerX;
+		distYN = Game.playerY - y;
+		distZN = z - Game.playerZ;
+		
+		int[] pair = modValuesYaw(distXN, distZN);
+		distX = pair[0];
+		distZ = pair[1];
+		
+		pair = modValuesPitch(distYN, distZ);
+		distY = pair[0];
+		distZ = pair[1];
+		
+		if(distZ > 0) {
+			normalDistance = (int) Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2));
+		}else {
+			normalDistance = -99999999;
+		}
+		
 	}
 
 	@Override
 	public void render(Graphics g) {
 		g.setColor(color);
 		
-		double distXN = x - Game.playerX;
-		double distYN = Game.playerY - y;
-		double distZN = z - Game.playerZ;
-		
-		int[] pair = modValuesYaw(distXN, distZN);
-		int distX = pair[0];
-		int distZ = pair[1];
-		
-		pair = modValuesPitch(distYN, distZ);
-		int distY = pair[0];
-		distZ = pair[1];
-		
-		
-		if(distZ > 0) {
-			double largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
+		double largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
 
-			int drawX = (int) (centerX + (Game.FRAME_WIDTH * (distX/largeChord)));
-			int drawY = (int) (centerY + (Game.FRAME_WIDTH * (distY/largeChord)));
+		int drawX = (int) (centerX + (Game.FRAME_WIDTH * (distX/largeChord)));
+		int drawY = (int) (centerY + (Game.FRAME_WIDTH * (distY/largeChord)));
 
-			drawPoint(g, drawX, drawY);
-		}
+		drawPoint(g, drawX, drawY);
 		
 	}
 	
@@ -79,6 +90,12 @@ public class Dot extends GameObject {
 	
 	public void drawPoint(Graphics g, int x, int y) {
 		g.fillOval(x - 3, y - 3, 5, 5);
+	}
+
+
+	@Override
+	public int compareTo(GameObject o) {
+		return o.normalDistance - this.normalDistance;
 	}
 	
 }

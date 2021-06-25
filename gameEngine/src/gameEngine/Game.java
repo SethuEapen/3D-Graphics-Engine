@@ -27,7 +27,7 @@ public class Game extends Canvas implements Runnable  {
 	public static double PyawVel = 0;
 	public static double PpitchVel = 0;
 	public static int FOV = 120;
-	public static double FPS = 144.0;
+	public static double FPS = 120.0;
 	public static double scaling = FPS/30;
 	public static double sprint = 1 ;/// (Game.FPS/Game.scaling);
 	public static boolean paused = false;
@@ -41,7 +41,7 @@ public class Game extends Canvas implements Runnable  {
 
 	
 	public Game() {
-		Window window = new Window(FRAME_WIDTH, FRAME_HEIGHT, "BlockSim", this);
+		new Window(FRAME_WIDTH, FRAME_HEIGHT, "BlockSim", this);
 		handler = new Handler();
 		this.addKeyListener(new KeyInput(handler));
 		

@@ -9,8 +9,31 @@ public class Triangle extends GameObject {
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
 	
-	
 	Color color;
+	
+	double distXN;
+	double distYN;
+	double distZN;
+	
+	int distX;
+	int distY;
+	int distZ;
+	
+	double distX2N;
+	double distY2N;
+	double distZ2N;
+	
+	int distX2;
+	int distY2;
+	int distZ2;
+	
+	double distX3N;
+	double distY3N;
+	double distZ3N;
+	
+	int distX3;
+	int distY3;
+	int distZ3;
 	
 	public Triangle(int x, int y, int z, int x2, int y2, int z2, int x3, int y3, int z3, Color color) {
 		super(x, y, z);
@@ -25,54 +48,58 @@ public class Triangle extends GameObject {
 
 	@Override
 	public void tick() {
+		distXN = x - Game.playerX;
+		distYN = Game.playerY - y;
+		distZN = z - Game.playerZ;
+		distX2N = x2 - Game.playerX;
+		distY2N = Game.playerY - y2;
+		distZ2N = z2 - Game.playerZ;
+		distX3N = x3 - Game.playerX;
+		distY3N = Game.playerY - y3;
+		distZ3N = z3 - Game.playerZ;
 		
+		//point 1
+		int pair[] =  modValuesYaw(distXN, distZN);
+		distX = pair[0];
+		distZ = pair[1];
+		
+		pair = modValuesPitch(distYN, distZ);
+		distY = pair[0];
+		distZ = pair[1];
+		
+		//point 2
+		pair =  modValuesYaw(distX2N, distZ2N);
+		distX2 = pair[0];
+		distZ2 = pair[1];
+		
+		pair = modValuesPitch(distY2N, distZ2);
+		distY2 = pair[0];
+		distZ2 = pair[1];
+		
+		//point 3
+		pair =  modValuesYaw(distX3N, distZ3N);
+		distX3 = pair[0];
+		distZ3 = pair[1];
+		
+		pair = modValuesPitch(distY3N, distZ3);
+		distY3 = pair[0];
+		distZ3 = pair[1];
+	
+		if(distZ >= 0 || distZ2 >= 0 || distZ3 >= 0) {
+			normalDistance = (int) Math.sqrt(Math.pow(mean(new double[] {distX, distX2, distX3}), 2) + Math.pow(mean(new double[] {distY, distY2, distY3}), 2) + Math.pow(mean(new double[] {distZ, distZ2, distZ3}), 2));
+		}else {
+			normalDistance = -99999999;
+		}
+		
+	
 	}
+	
 
 	@Override
 	public void render(Graphics g) {
 		g.setColor(color);
 		
-		
-		double distXN = x - Game.playerX;
-		double distYN = Game.playerY - y;
-		double distZN = z - Game.playerZ;
-		double distX2N = x2 - Game.playerX;
-		double distY2N = Game.playerY - y2;
-		double distZ2N = z2 - Game.playerZ;
-		double distX3N = x3 - Game.playerX;
-		double distY3N = Game.playerY - y3;
-		double distZ3N = z3 - Game.playerZ;
-		
-		//point 1
-		int pair[] =  modValuesYaw(distXN, distZN);
-		int distX = pair[0];
-		int distZ = pair[1];
-		
-		pair = modValuesPitch(distYN, distZ);
-		int distY = pair[0];
-		distZ = pair[1];
-		
-		//point 2
-		pair =  modValuesYaw(distX2N, distZ2N);
-		int distX2 = pair[0];
-		int distZ2 = pair[1];
-		
-		pair = modValuesPitch(distY2N, distZ2);
-		int distY2 = pair[0];
-		distZ2 = pair[1];
-		
-		//point 3
-		pair =  modValuesYaw(distX3N, distZ3N);
-		int distX3 = pair[0];
-		int distZ3 = pair[1];
-		
-		pair = modValuesPitch(distY3N, distZ3);
-		int distY3 = pair[0];
-		distZ3 = pair[1];
-
-		
-		if(distZ >= 0 || distZ2 >= 0 || distZ3 >= 0) {
-			
+				
 			double largeChord;
 			if(distZ >= 0) {
 				largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
@@ -103,7 +130,7 @@ public class Triangle extends GameObject {
 			int drawY3 = (int) (centerY + (Game.FRAME_WIDTH * (distY3/largeChord3)));
 			
 			g.fillPolygon(new int[] {drawX, drawX2, drawX3}, new int[] {drawY, drawY2, drawY3}, 3);			
-		}
+		
 		
 	}
 	
@@ -135,6 +162,19 @@ public class Triangle extends GameObject {
 		output[1] = (int)(Math.cos(theta1 + theta2) * hyp);
 		
 		return output;
+	}
+
+	public static double mean(double[] m) {
+	    double sum = 0;
+	    for (int i = 0; i < m.length; i++) {
+	        sum += m[i];
+	    }
+	    return sum / m.length;
+	}
+	
+	@Override
+	public int compareTo(GameObject o) {
+		return o.normalDistance - this.normalDistance;
 	}
 	
 
