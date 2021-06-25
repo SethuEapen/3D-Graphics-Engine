@@ -83,31 +83,4 @@ public class Dot extends GameObject {
 	
 }
 
-/*
-int distX = Math.abs(x - Game.playerX);
-int distY = Math.abs(y - Game.playerY);
-int distZ = Math.abs(z - Game.playerZ);//will need to be calculated differently based on the angles that you look at the object once tilt is taken account
-
-int distXN = y - Game.playerX;
-int distYN = y - Game.playerY;
-int distZN = z - Game.playerZ;
-
-int distX = Math.abs(x - Game.playerX);
-int distY = Math.abs(y - Game.playerY);
-int distZ = Math.abs(z - Game.playerZ);//will need to be calculated differently based on the angles that you look at the object once tilt is taken account
-
-
-double hyp = Math.sqrt(Math.pow(distXN, 2) + Math.pow(distZN, 2));
-		double theta1 = Math.toRadians(Game.Pyaw);
-		double theta2 = Math.atan(distXN/distZN);
-*/		
-//double hypX = Math.pow((Math.pow(distX, 2) + Math.pow(distZ, 2)), 0.5);
-		
-//double thetaX  = Math.acos(distZ/hypX);
-
-//double largeRadius = (1/Math.cos(dTr(Game.FOV/2)))*distZN;
-
-//double largeChord = largeRadius * Math.sin(dTr(Game.FOV/4));//stores the length of half the chord at the 
-
-
 

@@ -54,7 +54,7 @@ public class Game extends Canvas implements Runnable  {
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2-100, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2-100, 300, Color.red));
 
-		//new Box(200, 300, 100, 400, 300, 200, Color.blue, handler);
+		new Box(200, 300, 100, 400, 300, 200, Color.blue, handler);
 		//handler.addObject(new Box(100, 0, 1000));
 	}
 	

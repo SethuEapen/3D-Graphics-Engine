@@ -25,15 +25,7 @@ public class Triangle extends GameObject {
 
 	@Override
 	public void tick() {
-		x = x - velX;
-		y = y - velY;	
-		z = z - velZ;
-		x2 = x2 - velX;
-		y2 = y2 - velY;	
-		z2 = z2 - velZ;
-		x3 = x3 - velX;
-		y3 = y3 - velY;	
-		z3 = z3 - velZ;
+		
 	}
 
 	@Override
@@ -42,13 +34,13 @@ public class Triangle extends GameObject {
 		
 		
 		double distXN = x - Game.playerX;
-		double distYN = y - Game.playerY;
+		double distYN = Game.playerY - y;
 		double distZN = z - Game.playerZ;
 		double distX2N = x2 - Game.playerX;
-		double distY2N = y2 - Game.playerY;
+		double distY2N = Game.playerY - y2;
 		double distZ2N = z2 - Game.playerZ;
 		double distX3N = x3 - Game.playerX;
-		double distY3N = y3 - Game.playerY;
+		double distY3N = Game.playerY - y3;
 		double distZ3N = z3 - Game.playerZ;
 		
 		//point 1
@@ -79,11 +71,29 @@ public class Triangle extends GameObject {
 		distZ3 = pair[1];
 
 		
-		if(!(distZN < 0 && distZ2N < 0 && distZ3N < 0)) {
+		if(distZ > 0 || distZ2 > 0 || distZ3 > 0) {
 			
-			double largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
-			double largeChord2 = Math.tan(Math.toRadians(Game.FOV/2))*distZ2;
-			double largeChord3 = Math.tan(Math.toRadians(Game.FOV/2))*distZ3;
+			double largeChord;
+			if(distZ > 0) {
+				largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
+			} else {
+				largeChord = Math.tan(Math.toRadians(90) + Math.toRadians(Game.FOV/2))*+distZ;
+			}
+			
+			double largeChord2;
+			if(distZ2 > 0) {
+				largeChord2 = Math.tan(Math.toRadians(Game.FOV/2))*distZ2;
+			} else {
+				largeChord2 = Math.tan(Math.toRadians(90) + Math.toRadians(Game.FOV/2))*+distZ2;
+			}
+			
+			double largeChord3;
+			if(distZ3 > 0) {
+				largeChord3 = Math.tan(Math.toRadians(Game.FOV/2))*distZ3;
+			} else {
+				largeChord3 = Math.tan(Math.toRadians(90) + Math.toRadians(Game.FOV/2))*+distZ3;
+			}
+			
 			
 			int drawX = (int) (centerX + (Game.FRAME_WIDTH * (distX/largeChord)));
 			int drawY = (int) (centerY + (Game.FRAME_WIDTH * (distY/largeChord)));
@@ -91,18 +101,19 @@ public class Triangle extends GameObject {
 			int drawY2 = (int) (centerY + (Game.FRAME_WIDTH * (distY2/largeChord2)));
 			int drawX3 = (int) (centerX + (Game.FRAME_WIDTH * (distX3/largeChord3)));
 			int drawY3 = (int) (centerY + (Game.FRAME_WIDTH * (distY3/largeChord3)));
-			g.fillPolygon(new int[] {drawX, drawX2, drawX3}, new int[] {drawY, drawY2, drawY3}, 3);
 			
+			g.fillPolygon(new int[] {drawX, drawX2, drawX3}, new int[] {drawY, drawY2, drawY3}, 3);			
 		}
-		
 		
 	}
 	
 	public int[] modValuesYaw(double distDir, double distDepth) {
 		double hyp = Math.sqrt(Math.pow(distDir, 2) + Math.pow(distDepth, 2));
 		double theta1 = Math.toRadians(Game.Pyaw);
-		double theta2 = Math.atan(distDir/distDepth);
-		
+		double theta2 = Math.atan(distDir/distDepth);//find out if this is negitive or positive
+		if(distDepth < 0) {
+			theta2 = theta2 + Math.toRadians(180);
+		}	
 		int[] output = new int[2];
 		
 		output[0] = (int)(Math.sin(theta1 + theta2) * hyp);
@@ -115,7 +126,9 @@ public class Triangle extends GameObject {
 		double hyp = Math.sqrt(Math.pow(distDir, 2) + Math.pow(distDepth, 2));
 		double theta1 = Math.toRadians(Game.Ppitch);
 		double theta2 = Math.atan(distDir/distDepth);
-		
+		if(distDepth < 0) {
+			theta2 = theta2 + Math.toRadians(180);
+		}	
 		int[] output = new int[2];
 		
 		output[0] = (int)(Math.sin(theta1 + theta2) * hyp);
@@ -126,3 +139,21 @@ public class Triangle extends GameObject {
 	
 
 }
+
+
+/*double largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
+double largeChord2 = Math.tan(Math.toRadians(Game.FOV/2))*distZ2;
+double largeChord3 = Math.tan(Math.toRadians(Game.FOV/2))*distZ3;
+
+		x = x - velX;
+		y = y - velY;	
+		z = z - velZ;
+		x2 = x2 - velX;
+		y2 = y2 - velY;	
+		z2 = z2 - velZ;
+		x3 = x3 - velX;
+		y3 = y3 - velY;	
+		z3 = z3 - velZ;
+*/
+
+			
