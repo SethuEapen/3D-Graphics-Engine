@@ -15,8 +15,8 @@ public class KeyInput extends KeyAdapter {
 		int key = e.getKeyCode();
 		//System.out.println(key);
 		
-		if(key == KeyEvent.VK_SHIFT) Game.sprint = 2;
-		if(key == KeyEvent.VK_CONTROL) Game.sprint = 0.5;
+		if(key == KeyEvent.VK_SHIFT) Game.sprint = 2 ;/// (Game.FPS/Game.scaling);
+		if(key == KeyEvent.VK_CONTROL) Game.sprint = 0.5 ;/// (Game.FPS/Game.scaling);
 		if(key == KeyEvent.VK_W) Game.PvelZ = 5;
 		if(key == KeyEvent.VK_S) Game.PvelZ = -5;
 		if(key == KeyEvent.VK_A) Game.PvelX = -5;
@@ -33,8 +33,8 @@ public class KeyInput extends KeyAdapter {
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		if(key == KeyEvent.VK_SHIFT) Game.sprint = 1;
-		if(key == KeyEvent.VK_CONTROL) Game.sprint = 1;
+		if(key == KeyEvent.VK_SHIFT) Game.sprint = 1 ;/// (Game.FPS/Game.scaling);
+		if(key == KeyEvent.VK_CONTROL) Game.sprint = 1 ;/// (Game.FPS/Game.scaling);
 		if(key == KeyEvent.VK_W) Game.PvelZ = 0;
 		if(key == KeyEvent.VK_S) Game.PvelZ = 0;
 		if(key == KeyEvent.VK_A) Game.PvelX = 0;

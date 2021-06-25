@@ -16,18 +16,20 @@ public class Game extends Canvas implements Runnable  {
 	
 	public static int monitorX = 1920/2;
 	public static int monitorY = 1080/2;
-	public static int playerX = 0;
-	public static int playerY = 0;
-	public static int playerZ = 0;
-	public static int PvelX = 0;
-	public static int PvelY = 0;
-	public static int PvelZ = 0;
-	public static int Pyaw = 0;
-	public static int Ppitch = 0;
-	public static int PyawVel = 0;
-	public static int PpitchVel = 0;
+	public static double playerX = 0;
+	public static double playerY = 0;
+	public static double playerZ = 0;
+	public static double PvelX = 0;
+	public static double PvelY = 0;
+	public static double PvelZ = 0;
+	public static double Pyaw = 0;
+	public static double Ppitch = 0;
+	public static double PyawVel = 0;
+	public static double PpitchVel = 0;
 	public static int FOV = 120;
-	public static double sprint = 1;
+	public static double FPS = 144.0;
+	public static double scaling = FPS/30;
+	public static double sprint = 1 ;/// (Game.FPS/Game.scaling);
 	public static boolean paused = false;
 	
 	int centerX = Game.FRAME_WIDTH/2;
@@ -86,7 +88,7 @@ public class Game extends Canvas implements Runnable  {
 	@Override
 	public void run() {//on run
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 30.0;
+		double amountOfTicks = FPS;
 		double ns = 1000000000 /amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();

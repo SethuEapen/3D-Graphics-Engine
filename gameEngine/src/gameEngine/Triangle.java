@@ -71,24 +71,24 @@ public class Triangle extends GameObject {
 		distZ3 = pair[1];
 
 		
-		if(distZ > 0 || distZ2 > 0 || distZ3 > 0) {
+		if(distZ >= 0 || distZ2 >= 0 || distZ3 >= 0) {
 			
 			double largeChord;
-			if(distZ > 0) {
+			if(distZ >= 0) {
 				largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
 			} else {
 				largeChord = Math.tan(Math.toRadians(90) + Math.toRadians(Game.FOV/2))*+distZ;
 			}
 			
 			double largeChord2;
-			if(distZ2 > 0) {
+			if(distZ2 >= 0) {
 				largeChord2 = Math.tan(Math.toRadians(Game.FOV/2))*distZ2;
 			} else {
 				largeChord2 = Math.tan(Math.toRadians(90) + Math.toRadians(Game.FOV/2))*+distZ2;
 			}
 			
 			double largeChord3;
-			if(distZ3 > 0) {
+			if(distZ3 >= 0) {
 				largeChord3 = Math.tan(Math.toRadians(Game.FOV/2))*distZ3;
 			} else {
 				largeChord3 = Math.tan(Math.toRadians(90) + Math.toRadians(Game.FOV/2))*+distZ3;

@@ -6,10 +6,11 @@ import java.util.LinkedList;
 public class Handler { //steps through all the game objects and updates them individually
 	
 	LinkedList<GameObject> object = new LinkedList<GameObject>();
-	int count = 0;
 	
 	public void tick() {
-		Game.Pyaw = (int) (Game.Pyaw - (Game.PyawVel * Game.sprint));
+		Game.sprint = Game.sprint / Game.scaling;
+		
+		Game.Pyaw = (Game.Pyaw - (Game.PyawVel / Game.scaling));
 		
 		if(Game.Pyaw >= 360) {
 			Game.Pyaw = Game.Pyaw - 360;
@@ -17,7 +18,7 @@ public class Handler { //steps through all the game objects and updates them ind
 			Game.Pyaw = Game.Pyaw + 360;
 		}
 		
-		Game.Ppitch = (int) (Game.Ppitch + (Game.PpitchVel * Game.sprint));
+		Game.Ppitch = (Game.Ppitch + (Game.PpitchVel / Game.scaling));
 		
 		if(Game.Ppitch >= 360) {
 			Game.Ppitch = Game.Ppitch -360;
@@ -39,15 +40,18 @@ public class Handler { //steps through all the game objects and updates them ind
 		//modVelY = modVelY - (Math.cos(Math.toRadians(-Game.Ppitch)) * Game.PvelY);
 		
 		
-		Game.playerX = (int) (Game.playerX + (modVelX * Game.sprint));//Game.PvelX;
-		Game.playerY = (int) (Game.playerY + (Game.PvelY * Game.sprint));
-		Game.playerZ = (int) (Game.playerZ + (modVelZ * Game.sprint));//Game.PvelZ;
+		Game.playerX = (Game.playerX + (modVelX * Game.sprint));//Game.PvelX;
+		Game.playerY = (Game.playerY + (Game.PvelY * Game.sprint));
+		Game.playerZ = (Game.playerZ + (modVelZ * Game.sprint));//Game.PvelZ;
 		
 		
 		for(int i = 0; i < object.size(); i++) {
 			GameObject tempObject = object.get(i);
 			tempObject.tick();
 		}
+		
+		Game.sprint = Game.sprint * Game.scaling;
+
 	}
 	
 	
