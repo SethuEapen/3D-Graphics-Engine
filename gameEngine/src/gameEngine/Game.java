@@ -55,15 +55,15 @@ public class Game extends Canvas implements Runnable  {
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2-100, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2-100, 300, Color.red));
-
+		//new Box(0,0,0,700,1000,700, Color.blue, handler);
 		new Box(200, 300, 100, 400, 300, 200, Color.blue, handler);
 		//handler.addObject(new Box(100, 0, 1000));
 	}
 	
 	public void drawStuff() {
-		for(int x = 0; x < 500; x = x + 50) {
+		for(int x = 0; x < 300; x = x + 50) {
 			for(int z = 0; z < 1000; z = z + 50) {
-				for(int y = 0; y < 300; y = y + 50) {
+				for(int y = 0; y < 500; y = y + 50) {
 					handler.addObject(new Dot(x, y, z, Color.red));
 				}
 			}
