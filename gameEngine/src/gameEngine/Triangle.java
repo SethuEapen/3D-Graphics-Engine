@@ -5,40 +5,31 @@ import java.awt.Graphics;
 
 public class Triangle extends GameObject implements Runnable {
 
-	int x2, y2, z2, x3, y3, z3; 
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
 	
+	int x2, y2, z2, x3, y3, z3; 
+	
 	Color color;
 	
-	double distXN;
-	double distYN;
-	double distZN;
-	
-	double distX;
-	double distY;
-	double distZ;
-	
-	double distX2N;
-	double distY2N;
-	double distZ2N;
-	
-	double distX2;
-	double distY2;
-	double distZ2;
-	
-	double distX3N;
-	double distY3N;
-	double distZ3N;
-	
-	double distX3;
-	double distY3;
-	double distZ3;
-	
-	double[] normal;
-		
 	boolean monitor;
 	
+	double distXN, distYN, distZN;
+	
+	double distX, distY, distZ;
+	
+	double distX2N, distY2N, distZ2N;
+	
+	double distX2, distY2, distZ2;
+	
+	double distX3N, distY3N, distZ3N;
+	
+	double distX3, distY3, distZ3;
+	
+	double[] normal;
+	
+	double colorValue;
+			
 	public Triangle(int x, int y, int z, int x2, int y2, int z2, int x3, int y3, int z3, Color color, boolean monitor) {
 		super(x, y, z);
 		this.x2 = x2;
@@ -58,8 +49,10 @@ public class Triangle extends GameObject implements Runnable {
 		double[] V = subVectors(p3, p1);
 
 		normal = crossProduct(U, V);	
+		
+		shadingFromLights();
 	}
-
+	
 	@Override
 	public void run() {
 		tick();
@@ -106,6 +99,7 @@ public class Triangle extends GameObject implements Runnable {
 	
 		if(distZ >= 0 || distZ2 >= 0 || distZ3 >= 0) {
 			normalDistance = (int) Math.sqrt(Math.pow(mean(new double[] {distX, distX2, distX3}), 2) + Math.pow(mean(new double[] {distY, distY2, distY3}), 2) + Math.pow(mean(new double[] {distZ, distZ2, distZ3}), 2));
+			
 			/*
 			int nD1 = (int) Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2));
 			int nD2 = (int) Math.sqrt(Math.pow(distX2, 2) + Math.pow(distY2, 2) + Math.pow(distZ2, 2));
@@ -131,19 +125,6 @@ public class Triangle extends GameObject implements Runnable {
 		
 		return solution;
 	}
-	
-	
-	/*
-	
-	private double[] addVectors(int vect_A[], int vect_B[]) {
-		double[] temp = new double[3];
-		
-		temp[0] = vect_A[0] + vect_B[0];
-		temp[1] = vect_A[1] + vect_B[1];
-		temp[2] = vect_A[2] + vect_B[2];
-
-		return temp;		
-	}*/
 	
 	private double[] subVectors(double vect_A[], double vect_B[]) {
 		double[] temp = new double[3];
@@ -179,28 +160,44 @@ public class Triangle extends GameObject implements Runnable {
 		return temp;
     }
 	
-	@Override
+    private void shadingFromLights() {
+		double lightInfluence = (calculateNormals((x - Game.lights[0].x), (Game.lights[0].y - y), (z - Game.lights[0].z))) * (Game.lights[0].intensity);
+		
+		double lightDistance =  Math.sqrt(Math.pow(mean(new double[] {x, x2, x3}) - Game.lights[0].x, 2) + 
+				Math.pow(Game.lights[0].y - mean(new double[] {y, y2, y3}), 2) + 
+				Math.pow(mean(new double[] {z, z2, z3}) - Game.lights[0].z, 2));
+		
+		
+		//lightInfluence = Math.max(lightInfluence, 10000000);
+		
+		colorValue = (int) (255 * (lightInfluence/1700000000));
+		
+		
+		colorValue = Math.min(255, colorValue);
+		colorValue = Math.max(0, colorValue);
+		
+		colorValue = colorValue - (lightDistance/60);
+				
+	}
+    
+    @Override
 	public void render(Graphics g) {
 		double playerInfluence = calculateNormals(distXN, distYN, distZN);
 		
-		double lightInfluence = (calculateNormals((x - Game.lights[0].x), (Game.lights[0].y - y), (z - Game.lights[0].z)));
-				
-		double lightIntencity =  Math.sqrt(Math.pow(mean(new double[] {x, x2, x3}) - Game.lights[0].x, 2) + 
-				Math.pow(Game.lights[0].y - mean(new double[] {y, y2, y3}), 2) + 
-				Math.pow(mean(new double[] {z, z2, z3}) - Game.lights[0].z, 2)) / (Game.lights[0].intensity/10);
+		//calculate light interation with player distance
+		double distVal = (double)(normalDistance) / 30;
 		
-		System.out.println(lightIntencity);
+
+		//int adjColorValue = (int) colorValue;
+		int adjColorValue = (int) (colorValue - distVal);
 		
-		lightInfluence = Math.max(lightInfluence, 10000000);
+
 		
-		int value = (int) ((lightInfluence/lightIntencity)/1000); //(normalDistance*1000));
+		adjColorValue = Math.min(255, adjColorValue);
+		adjColorValue = Math.max(0, adjColorValue);
 		
-		value = Math.min(255, value);
-		
-		value = Math.max(0, value);
-		
-		Color shade = new Color(value,value,value);
-		g.setColor(shade);
+		color = new Color(adjColorValue, adjColorValue, adjColorValue);
+		g.setColor(color);
 		
 		if(playerInfluence > 0) {
 		
@@ -283,238 +280,3 @@ public class Triangle extends GameObject implements Runnable {
 }
 
 
-/*double largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;
-double largeChord2 = Math.tan(Math.toRadians(Game.FOV/2))*distZ2;
-double largeChord3 = Math.tan(Math.toRadians(Game.FOV/2))*distZ3;
-
-		x = x - velX;
-		y = y - velY;	
-		z = z - velZ;
-		x2 = x2 - velX;
-		y2 = y2 - velY;	
-		z2 = z2 - velZ;
-		x3 = x3 - velX;
-		y3 = y3 - velY;	
-		z3 = z3 - velZ;
-		
-		
-		//find midpoint of first 2 points
-		double midPointX1 = (distX2 + distX)/2;
-		double midPointY1 = (distY2 + distY)/2;
-		double midPointZ1 = (distZ2 + distZ)/2;
-		
-		double midDistX = midPointX1 - distX3;
-		double midDistY = midPointY1 - distY3;
-		double midDistZ = midPointZ1 - distZ3;
-		
-		double midPitch1 = Math.atan(midDistX/midDistY);//adjust for +180
-		
-		if(midDistY < 0) {
-			midPitch1 = midPitch1 + Math.toRadians(180);
-		}
-		
-		double midYaw1 = Math.atan(midDistX/midDistZ);//adjust for +180
-		
-		if(midDistZ < 0) {
-			midYaw1 = midYaw1 + Math.toRadians(180);
-		}
-		
-		double midPointX2 = (distX3 + distX)/2;
-		double midPointY2 = (distY3 + distY)/2;
-		double midPointZ2 = (distZ3 + distZ)/2;
-		
-		double midDistX2 = midPointX2 - distX2;
-		double midDistY2 = midPointY2 - distY2;
-		double midDistZ2 = midPointZ2 - distZ2;
-		
-		double midPitch2 = Math.atan(midDistX2/midDistY2);//adjust for +180
-		
-		if(midDistY2 < 0) {
-			midPitch2 = midPitch2 + Math.toRadians(180);
-		}
-		
-		double midYaw2 = Math.atan(midDistX2/midDistZ2);//adjust for +180
-		
-		if(midDistZ2 < 0) {
-			midYaw2 = midYaw2 + Math.toRadians(180);
-		}
-		
-		double midPointX3 = (distX3 + distX2)/2;
-		double midPointY3 = (distY3 + distY2)/2;
-		double midPointZ3 = (distZ3 + distZ2)/2;
-		
-		double midDistX3 = midPointX3 - distX;
-		double midDistY3 = midPointY3 - distY;
-		double midDistZ3 = midPointZ3 - distZ;
-		
-		double midPitch3 = Math.atan(midDistX3/midDistY3);//adjust for +180
-		
-		if(midDistY3 < 0) {
-			midPitch3 = midPitch3 + Math.toRadians(180);
-		}
-		
-		double midYaw3 = Math.atan(midDistX3/midDistZ3);//adjust for +180
-		
-		if(midDistZ3 < 0) {
-			midYaw3 = midYaw3 + Math.toRadians(180);
-		}
-		
-		private boolean calculateNormalsLong() {
-		int[] p1 = {x-x2, -(y-y2), z-z2};
-		int[] p2 = {x2-x3, -(y2-y3), z2-z3};
-		int[] p3 = {x3-x, -(y3-y), z3-z};
-
-		int[] U = subVectors(p2, p1);
-		int[] V = subVectors(p3, p1);
-
-		int[] normal = crossProduct(U, V);
-		
-		double normalYaw;
-		if(normal[0] != 0) {
-			normalYaw = Math.toDegrees(Math.atan(normal[1]/normal[2]));
-		}else {
-			if(normal[1] != 0) {
-				normalYaw = 90 * (normal[1]/Math.abs(normal[1]));
-			} else {
-			}
-		}
-		
-		double normalPitch = Math.toDegrees(Math.atan2(normal[2], normal[1]));
-		
-		if(normal[1] < 0) {
-			//normalPitch = normalPitch + 180;
-		}
-		
-		double fds = Math.toDegrees(Math.atan2(normal[0], normal[1]));
-		
-		if(normal[1] < 0) {
-			//normalYaw = normalYaw + 180;
-		}
-		
-		if(normal[1] < 0) {
-			normalYaw = normalYaw + 180;
-		}
-		
-		double afds;
-		if(normal[0] != 0) {
-			normalPitch = Math.toDegrees(Math.atan(normal[1]/normal[0]));
-		}else {
-			normalPitch = 90 * (normal[1]/Math.abs(normal[1]));
-		}
-		
-		if(normal[1] < 0) {
-			normalPitch = normalPitch + 180;
-		}
-		
-		System.out.println(Arrays.toString(normal));
-		System.out.println("Yaw: " + normalYaw + "       Pitch: " + normalPitch);
-		
-		return false;
-	}
-		
-		
-		
-*/
-
-/*private double[] normalComponents(double dX, double dX2, double dX3, double dY, double dY2, double dY3, double dZ, double dZ2, double dZ3) {
-double midPointX = (dX2 + dX)/2;
-double midPointY = (dY2 + dY)/2;
-double midPointZ = (dZ2 + dZ)/2;
-
-double midDistX = midPointX - dX3;
-double midDistY = midPointY - dY3;
-double midDistZ = midPointZ - dZ3;
-
-double midPitch = Math.atan(midDistX/midDistY);//adjust for +180
-
-if(midDistY < 0) {
-	//midPitch = midPitch + Math.toRadians(180);
-}
-
-double midYaw = Math.atan(midDistX/midDistZ);//adjust for +180
-
-if(midDistZ < 0) {
-	//midYaw = midYaw + Math.toRadians(180);
-}
-
-double[] pair = new double[] {midPitch, midYaw};
-
-return pair;
-}*/
-
-/*private double[] normalComponents(double dX, double dX2, double dX3, double dY, double dY2, double dY3, double dZ, double dZ2, double dZ3) {
-double midPointX = (dX2 + dX)/2;
-double midPointY = (dY2 + dY)/2;
-double midPointZ = (dZ2 + dZ)/2;
-
-double midDistX = midPointX - dX3;
-double midDistY = midPointY - dY3;
-double midDistZ = midPointZ - dZ3;
-
-
-double midPitch;
-
-if(midDistY != 0) {
-	midPitch = -Math.atan(midDistX/midDistY);//adjust for +180
-} else {
-	midPitch = 0;
-}
-
-
-double midYaw;
-
-if(midDistZ != 0) {
-	midYaw = -Math.atan(midDistX/midDistZ);//adjust for +180
-}else {
-	midYaw = 0.0;
-}
-
-
-if(midDistZ < 0) {
-	//midYaw = midYaw + Math.toRadians(180);
-}
-
-if(midDistY < 0) {
-	//midPitch = midPitch + Math.toRadians(180);
-}
-
-double[] pair = new double[] {midPitch, midYaw};
-
-
-return pair;
-}*/
-
-
-/*private boolean calculateNormals() {
-//normal 1
-double[] pair1 = normalComponents(distXN, distX2N, distX3N, distYN, distY2N, distY3N, distZN, distZ2N, distZ3N);
-
-//normal 2
-double[] pair2 = normalComponents(distX2N, distX3N, distXN, distY2N, distY3N, distYN, distZ2N, distZ3N, distZN);
-
-//normal 3
-double[] pair3 = normalComponents(distX3N, distXN, distX2N, distY3N, distYN, distY2N, distZ3N, distZN, distZ2N);
-
-
-double normalPitch = mean(new double[] {pair1[0], pair2[0], pair3[0]});
-		
-double normalYaw = mean(new double[] {pair1[1], pair2[1], pair3[1]});
-
-System.out.println("Normal Yaw: " + Math.toDegrees(normalYaw) + "      Normal Pitch: " + Math.toDegrees(normalPitch));
-
-
-//if(normalPitch > Math.toRadians(-90) && Math.toRadians(90) > normalPitch) {
-
-	if(normalYaw > Math.toRadians(90) && Math.toRadians(180) > normalYaw) {
-		return true;
-	}
-//}
-
-
-return true;
-}*/
-
-//double[] p1 = {(distX-distX2), -(distY-distY2), (distZ-distZ2)};
-		//double[] p2 = {(distX2-distX3), -(distY2-distY3), (distZ2-distZ3)};
-		//double[] p3 = {(distX3-distX), -(distY3-distY), (distZ3-distZ)};
-			

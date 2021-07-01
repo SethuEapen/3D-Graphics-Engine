@@ -27,9 +27,9 @@ public class Game extends Canvas implements Runnable  {
 	public static double PyawVel = 0;
 	public static double PpitchVel = 0;
 	public static int FOV = 120;
-	public static double FPS = 144.0;
+	public static double FPS = 60.0;
 	public static double scaling = FPS/30;
-	public static double sprint = 1 ;/// (Game.FPS/Game.scaling);
+	public static double sprint = (Game.FPS/Game.scaling);
 	public static boolean paused = false;
 	
 	int centerX = Game.FRAME_WIDTH/2;
@@ -51,10 +51,12 @@ public class Game extends Canvas implements Runnable  {
 		//this.addMouseMotionListener(mouseInput);
 		
 		//add lights
-		lights[0] = new Light(-100,500,-400, 10);
+		lights[0] = new Light(-100,1000,-400, 10);
+		handler.addObject(new Dot(-100, 1000, -400, Color.red));
+
 		//handler.addObject(new Box(50, 50, 50));
 		//handler.addObject(new Box(400, 200, 15, 70));
-		drawStuff();
+		//drawStuff();
 		//handler.addObject(new Triangle(100, 200, 10, 300, 100, 30, 200, 40, 1000, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2, 300, Color.red));
@@ -62,6 +64,7 @@ public class Game extends Canvas implements Runnable  {
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2-100, 300, Color.red));
 		//new Box(0,0,0,700,1000,700, Color.blue, handler);
 		new Box(200, 300, 100, 400, 300, 200, Color.blue, handler);
+
 		//handler.addObject(new Dot(200,300, 100+300, Color.green));
 		//handler.addObject(new Dot(150,250, 50+300, Color.green));
 
