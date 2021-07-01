@@ -3,7 +3,7 @@ import java.awt.Graphics;
 
 
 
-public abstract class GameObject implements Comparable<GameObject> {
+public abstract class GameObject implements Comparable<GameObject>, Runnable {
 	protected int x;
 	protected int y;
 	protected int z;

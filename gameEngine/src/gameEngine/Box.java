@@ -19,30 +19,31 @@ public class Box {
 		this.handler = handler;
 		
 		
+		//clockwise is showing face
 		
+		//back face counter clockwise
 		
-		//back face
 		handler.addObject(new Triangle(x, y, (z + width), (x + length), y, (z + width), x, (y + height), (z + width), color));
-		handler.addObject(new Triangle((x + length), (y + height), (z + width), (x + length), y, (z + width), x, (y + height), (z + width), color));
+		handler.addObject(new Triangle((x + length), (y + height), (z + width), x, (y + height), (z + width), (x + length), y, (z + width), color));
 		
-		//left side
+		//left side counter clockwise
 		handler.addObject(new Triangle(x, y, z, x, y, (z + width), x, (y + height), z, Color.green));
-		handler.addObject(new Triangle(x, (y + height), (z + width), x, y, (z + width), x, (y + height), z, Color.green));
+		handler.addObject(new Triangle(x, (y + height), (z + width), x, (y + height), z, x, y, (z + width), Color.green));
 
-		//right side
-		handler.addObject(new Triangle((x + length), y, z, (x + length), y, (z + width), (x + length), (y + height), z, Color.green));
+		//right side counter clockwise
+		handler.addObject(new Triangle((x + length), y, z, (x + length), (y + height), z, (x + length), y, (z + width), Color.green));
 		handler.addObject(new Triangle((x + length), (y + height), (z + width), (x + length), y, (z + width), (x + length), (y + height), z, Color.green));
 		
-		//top face
+		//bottom face //counter clockwise
 		handler.addObject(new Triangle(x, y, z, (x + length), y, z, x, y, (z + width), Color.red));
-		handler.addObject(new Triangle((x + length), y, (z + width), (x + length), y, z, x, y, (z + width), Color.red));
+		handler.addObject(new Triangle((x + length), y, (z + width), x, y, (z + width), (x + length), y, z, Color.red));
 
-		//bottom face
-		handler.addObject(new Triangle(x, (y + height), z, (x + length), (y + height), z, x, (y + height), (z + width), Color.red));
+		//top face clockwise
+		handler.addObject(new Triangle(x, (y + height), z, x, (y + height), (z + width), (x + length), (y + height), z, Color.red));
 		handler.addObject(new Triangle((x + length), (y + height), (z + width), (x + length), (y + height), z, x, (y + height), (z + width), Color.red));
 
-		//front face
-		handler.addObject(new Triangle(x, y, z, (x + length), y, z, x, (y + height), z, color));
+		//front face clockwise
+		handler.addObject(new Triangle(x, y, z, x, (y + height), z, (x + length), y, z, color));
 		handler.addObject(new Triangle((x + length), (y + height), z, (x + length), y, z, x, (y + height), z, color));
 	}
 

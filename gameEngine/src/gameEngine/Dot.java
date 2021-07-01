@@ -3,7 +3,7 @@ package gameEngine;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Dot extends GameObject {
+public class Dot extends GameObject implements Runnable {
 
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
@@ -21,6 +21,11 @@ public class Dot extends GameObject {
 	public Dot(int x, int y, int z, Color color){
 		super(x, y, z);
 		this.color = color;
+	}
+	
+	@Override
+	public void run() {
+		tick();
 	}
 	
 	@Override
@@ -97,6 +102,8 @@ public class Dot extends GameObject {
 	public int compareTo(GameObject o) {
 		return o.normalDistance - this.normalDistance;
 	}
+
+	
 	
 }
 

@@ -46,15 +46,22 @@ public class Handler { //steps through all the game objects and updates them ind
 		
 		sortedRender.clear();
 
+		//Thread thread = new Thread();
+
+		
 		for(int i = 0; i < object.size(); i++) {
 			GameObject tempObject = object.get(i);
-			tempObject.tick();
+			//Thread thread = new Thread(tempObject);
 			
+			
+			//thread.start();
+			tempObject.tick();
 			if(tempObject.normalDistance != -99999999) {
 				sortedRender.add(tempObject);
 			}
+			
 		}
-		
+				
 		Collections.sort(sortedRender);
 		
 		Game.sprint = Game.sprint * Game.scaling;

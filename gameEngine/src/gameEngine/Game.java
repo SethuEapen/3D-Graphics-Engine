@@ -27,7 +27,7 @@ public class Game extends Canvas implements Runnable  {
 	public static double PyawVel = 0;
 	public static double PpitchVel = 0;
 	public static int FOV = 120;
-	public static double FPS = 120.0;
+	public static double FPS = 144.0;
 	public static double scaling = FPS/30;
 	public static double sprint = 1 ;/// (Game.FPS/Game.scaling);
 	public static boolean paused = false;
@@ -57,6 +57,10 @@ public class Game extends Canvas implements Runnable  {
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2-100, 300, Color.red));
 		//new Box(0,0,0,700,1000,700, Color.blue, handler);
 		new Box(200, 300, 100, 400, 300, 200, Color.blue, handler);
+		//handler.addObject(new Dot(200,300, 100+300, Color.green));
+		//handler.addObject(new Dot(150,250, 50+300, Color.green));
+
+		
 		//handler.addObject(new Box(100, 0, 1000));
 	}
 	
@@ -127,7 +131,7 @@ public class Game extends Canvas implements Runnable  {
 		
 		Graphics g = bs.getDrawGraphics();
 		
-		g.setColor(Color.white);
+		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
 		
 		handler.render(g);
