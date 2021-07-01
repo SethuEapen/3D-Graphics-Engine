@@ -35,6 +35,8 @@ public class Game extends Canvas implements Runnable  {
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
 
+	static Light[] lights = new Light[5];
+	
 	private Thread thread;
 	private boolean running = false;
 	private Handler handler;
@@ -47,6 +49,9 @@ public class Game extends Canvas implements Runnable  {
 		
 		//MouseInput mouseInput = new MouseInput(handler, window);
 		//this.addMouseMotionListener(mouseInput);
+		
+		//add lights
+		lights[0] = new Light(-100,500,-400, 10);
 		//handler.addObject(new Box(50, 50, 50));
 		//handler.addObject(new Box(400, 200, 15, 70));
 		drawStuff();
@@ -96,7 +101,7 @@ public class Game extends Canvas implements Runnable  {
 		double ns = 1000000000 /amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
-		int frames = 0;
+		//int frames = 0;
 		while(running){//tick fucntion
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -107,12 +112,12 @@ public class Game extends Canvas implements Runnable  {
 			}
 			if(running)
 				render();
-			frames++;
+			//frames++;
 			
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				//System.out.println("FPS: " + frames);
-				frames = 0;
+				//frames = 0;
 			}
 		}
 		stop();

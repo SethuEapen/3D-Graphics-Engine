@@ -5,10 +5,10 @@ import java.awt.event.KeyEvent;
 
 public class KeyInput extends KeyAdapter {
 
-	private Handler handler;
+	//private Handler handler;
 	
 	public KeyInput(Handler handler) {
-		this.handler = handler;
+		//this.handler = handler;
 	}
 	
 	public void keyPressed(KeyEvent e) {

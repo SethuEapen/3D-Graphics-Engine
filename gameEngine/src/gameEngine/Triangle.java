@@ -2,8 +2,6 @@ package gameEngine;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Arrays;
-import java.util.Vector;
 
 public class Triangle extends GameObject implements Runnable {
 
@@ -38,8 +36,10 @@ public class Triangle extends GameObject implements Runnable {
 	double distZ3;
 	
 	double[] normal;
+		
+	boolean monitor;
 	
-	public Triangle(int x, int y, int z, int x2, int y2, int z2, int x3, int y3, int z3, Color color) {
+	public Triangle(int x, int y, int z, int x2, int y2, int z2, int x3, int y3, int z3, Color color, boolean monitor) {
 		super(x, y, z);
 		this.x2 = x2;
 		this.y2 = y2;
@@ -48,6 +48,7 @@ public class Triangle extends GameObject implements Runnable {
 		this.y3 = y3;
 		this.z3 = z3;
 		this.color = color;
+		this.monitor = monitor;
 		
 		double[] p1 = {x-x2, -(y-y2), z-z2};
 		double[] p2 = {x2-x3, -(y2-y3), z2-z3};
@@ -104,14 +105,14 @@ public class Triangle extends GameObject implements Runnable {
 		distZ3 = pair[1];
 	
 		if(distZ >= 0 || distZ2 >= 0 || distZ3 >= 0) {
-			//normalDistance = (int) Math.sqrt(Math.pow(mean(new double[] {distX, distX2, distX3}), 2) + Math.pow(mean(new double[] {distY, distY2, distY3}), 2) + Math.pow(mean(new double[] {distZ, distZ2, distZ3}), 2));
-			
+			normalDistance = (int) Math.sqrt(Math.pow(mean(new double[] {distX, distX2, distX3}), 2) + Math.pow(mean(new double[] {distY, distY2, distY3}), 2) + Math.pow(mean(new double[] {distZ, distZ2, distZ3}), 2));
+			/*
 			int nD1 = (int) Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2) + Math.pow(distZ, 2));
 			int nD2 = (int) Math.sqrt(Math.pow(distX2, 2) + Math.pow(distY2, 2) + Math.pow(distZ2, 2));
 			int nD3 = (int) Math.sqrt(Math.pow(distX3, 2) + Math.pow(distY3, 2) + Math.pow(distZ3, 2));
 			
 			normalDistance = Math.min(nD1, nD2);
-			normalDistance = Math.min(normalDistance, nD3);
+			normalDistance = Math.min(normalDistance, nD3);*/
 			
 		}else {
 			normalDistance = -99999999;
@@ -121,21 +122,18 @@ public class Triangle extends GameObject implements Runnable {
 	
 	
 	
-	private boolean calculateNormals() {
-		double[] playerVector = {distXN, distYN, distZN};
+	private double calculateNormals(double dX, double dY, double dZ) {
+		double[] playerVector = {dX, dY, dZ};
 		
 		double solution = dotProduct(normal, playerVector);
 		
 		//System.out.println(Arrays.toString(normal));
 		
-		if(solution > 0) {
-			return true;
-		}
-		return false;
+		return solution;
 	}
 	
 	
-	
+	/*
 	
 	private double[] addVectors(int vect_A[], int vect_B[]) {
 		double[] temp = new double[3];
@@ -145,7 +143,7 @@ public class Triangle extends GameObject implements Runnable {
 		temp[2] = vect_A[2] + vect_B[2];
 
 		return temp;		
-	}
+	}*/
 	
 	private double[] subVectors(double vect_A[], double vect_B[]) {
 		double[] temp = new double[3];
@@ -183,9 +181,28 @@ public class Triangle extends GameObject implements Runnable {
 	
 	@Override
 	public void render(Graphics g) {
-		g.setColor(color);
+		double playerInfluence = calculateNormals(distXN, distYN, distZN);
 		
-		if(calculateNormals()) {
+		double lightInfluence = (calculateNormals((x - Game.lights[0].x), (Game.lights[0].y - y), (z - Game.lights[0].z)));
+				
+		double lightIntencity =  Math.sqrt(Math.pow(mean(new double[] {x, x2, x3}) - Game.lights[0].x, 2) + 
+				Math.pow(Game.lights[0].y - mean(new double[] {y, y2, y3}), 2) + 
+				Math.pow(mean(new double[] {z, z2, z3}) - Game.lights[0].z, 2)) / (Game.lights[0].intensity/10);
+		
+		System.out.println(lightIntencity);
+		
+		lightInfluence = Math.max(lightInfluence, 10000000);
+		
+		int value = (int) ((lightInfluence/lightIntencity)/1000); //(normalDistance*1000));
+		
+		value = Math.min(255, value);
+		
+		value = Math.max(0, value);
+		
+		Color shade = new Color(value,value,value);
+		g.setColor(shade);
+		
+		if(playerInfluence > 0) {
 		
 			double largeChord;
 			if(distZ >= 0) {
