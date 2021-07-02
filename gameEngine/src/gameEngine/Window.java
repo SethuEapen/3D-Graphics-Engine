@@ -1,10 +1,14 @@
 package gameEngine;
 import java.awt.Canvas;
+import java.awt.Cursor;
 //import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 //import java.awt.Point;
 //import java.awt.Toolkit;
 //import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
@@ -21,7 +25,15 @@ public class Window extends Canvas { //creates the window
 	
 	JFrame frame;
 	
+	Game game;
+	
+	BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+	Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
+		    cursorImg, new Point(0, 0), "blank cursor");
+	
 	public Window(int width, int height, String title, Game game) {//create window object
+		this.game = game;
+		
 		//Create JFrame
 		frame = new JFrame(title);
 		
@@ -38,15 +50,19 @@ public class Window extends Canvas { //creates the window
 		
 		frame.add(game);
 		
-		//BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 		
-		//Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-		//	    cursorImg, new Point(0, 0), "blank cursor");
-				
-		//game.setCursor(blankCursor);
+		setBlankCursor();
 
 	
 		game.start();
+	}
+	
+	public void setBlankCursor() {
+		game.setCursor(blankCursor);
+	}
+	
+	public void setDefaultCursor() {
+		game.setCursor(Cursor.getDefaultCursor());
 	}
 		
 }

@@ -7,8 +7,11 @@ public class KeyInput extends KeyAdapter {
 
 	//private Handler handler;
 	
-	public KeyInput(Handler handler) {
+	Window window;
+	
+	public KeyInput(Handler handler, Window window) {
 		//this.handler = handler;
+		this.window = window;
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -45,7 +48,14 @@ public class KeyInput extends KeyAdapter {
 		if(key == KeyEvent.VK_LEFT) Game.PyawVel = 0;
 		if(key == KeyEvent.VK_UP) Game.PpitchVel = 0;
 		if(key == KeyEvent.VK_DOWN) Game.PpitchVel = 0;
-		if(key == KeyEvent.VK_ESCAPE) Game.paused = !Game.paused;
+		if(key == KeyEvent.VK_ESCAPE) {
+			if(Game.paused == true) {
+				window.setBlankCursor();
+			}else {
+				window.setDefaultCursor();
+			}
+			Game.paused = !Game.paused;
+		}
 
 		
 	}

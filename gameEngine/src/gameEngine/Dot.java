@@ -52,6 +52,8 @@ public class Dot extends GameObject implements Runnable {
 
 	@Override
 	public void render(Graphics g) {
+		
+		
 		g.setColor(color);
 		
 		double largeChord = Math.tan(Math.toRadians(Game.FOV/2))*distZ;

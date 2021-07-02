@@ -2,12 +2,11 @@ package gameEngine;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 
 
 public class Handler { //steps through all the game objects and updates them individually
 	
-	LinkedList<GameObject> object = new LinkedList<GameObject>();
+	ArrayList<GameObject> object = new ArrayList<GameObject>();
 	ArrayList<GameObject> sortedRender = new ArrayList<GameObject>();
 
 	
@@ -47,19 +46,15 @@ public class Handler { //steps through all the game objects and updates them ind
 		//Thread thread = new Thread();
 
 		
-		for(int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
+		for (GameObject tempObject : object) {
 			//Thread thread = new Thread(tempObject);
-			
-			
 			//thread.start();
 			tempObject.tick();
 			if(tempObject.normalDistance != -99999999) {
 				sortedRender.add(tempObject);
-			}
-			
+			}			
 		}
-				
+		
 		Collections.sort(sortedRender);
 		
 		Game.sprint = Game.sprint * Game.scaling;

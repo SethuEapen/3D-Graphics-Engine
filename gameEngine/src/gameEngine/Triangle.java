@@ -114,8 +114,6 @@ public class Triangle extends GameObject implements Runnable {
 	
 	}
 	
-	
-	
 	private double calculateNormals(double dX, double dY, double dZ) {
 		double[] playerVector = {dX, dY, dZ};
 		
@@ -125,40 +123,6 @@ public class Triangle extends GameObject implements Runnable {
 		
 		return solution;
 	}
-	
-	private double[] subVectors(double vect_A[], double vect_B[]) {
-		double[] temp = new double[3];
-		
-		temp[0] = vect_A[0] - vect_B[0];
-		temp[1] = vect_A[1] - vect_B[1];
-		temp[2] = vect_A[2] - vect_B[2];
-
-		return temp;		
-	}
-
-	private double dotProduct(double vect_A[], double vect_B[])
-    {
- 
-		double product = 0;
- 
-        // Loop for calculate cot product
-        for (int i = 0; i < 3; i++)
-            product = product + vect_A[i] * vect_B[i];
-        return product;
-    }
- 
-    private double[] crossProduct(double vect_A[], double vect_B[]){
-    	double[] temp = new double[3];
-        
-		temp[0] = vect_A[1] * vect_B[2]
-                     - vect_A[2] * vect_B[1];
-		temp[1] = vect_A[2] * vect_B[0]
-                     - vect_A[0] * vect_B[2];
-		temp[2] = vect_A[0] * vect_B[1]
-                     - vect_A[1] * vect_B[0];
-		
-		return temp;
-    }
 	
     private void shadingFromLights() {
 		double lightInfluence = (calculateNormals((x - Game.lights[0].x), (Game.lights[0].y - y), (z - Game.lights[0].z))) * (Game.lights[0].intensity);
@@ -174,7 +138,7 @@ public class Triangle extends GameObject implements Runnable {
 		
 		
 		colorValue = Math.min(255, colorValue);
-		colorValue = Math.max(0, colorValue);
+		colorValue = Math.max(50, colorValue);
 		
 		colorValue = colorValue - (lightDistance/60);
 				
@@ -271,6 +235,40 @@ public class Triangle extends GameObject implements Runnable {
 	    }
 	    return sum / m.length;
 	}
+	
+	private double[] subVectors(double vect_A[], double vect_B[]) {
+		double[] temp = new double[3];
+		
+		temp[0] = vect_A[0] - vect_B[0];
+		temp[1] = vect_A[1] - vect_B[1];
+		temp[2] = vect_A[2] - vect_B[2];
+
+		return temp;		
+	}
+
+	private double dotProduct(double vect_A[], double vect_B[])
+    {
+ 
+		double product = 0;
+ 
+        // Loop for calculate cot product
+        for (int i = 0; i < 3; i++)
+            product = product + vect_A[i] * vect_B[i];
+        return product;
+    }
+ 
+    private double[] crossProduct(double vect_A[], double vect_B[]){
+    	double[] temp = new double[3];
+        
+		temp[0] = vect_A[1] * vect_B[2]
+                     - vect_A[2] * vect_B[1];
+		temp[1] = vect_A[2] * vect_B[0]
+                     - vect_A[0] * vect_B[2];
+		temp[2] = vect_A[0] * vect_B[1]
+                     - vect_A[1] * vect_B[0];
+		
+		return temp;
+    }
 	
 	@Override
 	public int compareTo(GameObject o) {
