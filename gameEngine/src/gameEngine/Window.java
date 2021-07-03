@@ -23,9 +23,11 @@ public class Window extends Canvas { //creates the window
 	 * 
 	 */
 	
-	JFrame frame;
+	boolean minimized = false;
 	
+	JFrame frame;
 	Game game;
+	String title;
 	
 	BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 	Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
@@ -33,24 +35,29 @@ public class Window extends Canvas { //creates the window
 	
 	public Window(int width, int height, String title, Game game) {//create window object
 		this.game = game;
+		this.title = title;
 		
 		//Create JFrame
 		frame = new JFrame(title);
 		
-		frame.setPreferredSize(new Dimension(width, height));
-		frame.setMaximumSize(new Dimension(width, height));
-		frame.setMinimumSize(new Dimension(width, height));
+		//frame.setPreferredSize(new Dimension(width, height));
+		//frame.setSize(new Dimension(width, height));
+		
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		frame.setUndecorated(true);
+		
+		//frame.setMaximumSize(new Dimension(width, height));
+		//frame.setMinimumSize(new Dimension(width, height));
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setLocationRelativeTo(null);		
-		
-		frame.setVisible(true);
-
 		
 		frame.add(game);
 		
 		
+		frame.setVisible(true);
+
 		setBlankCursor();
 
 	
@@ -63,6 +70,24 @@ public class Window extends Canvas { //creates the window
 	
 	public void setDefaultCursor() {
 		game.setCursor(Cursor.getDefaultCursor());
+	}
+
+	public void changeMinimize() {
+		frame.setVisible(false);
+		frame.dispose();
+		Dimension size;
+		if(minimized) {
+			frame.setUndecorated(true);
+			size = Toolkit.getDefaultToolkit().getScreenSize();
+
+		} else {
+			frame.setUndecorated(false);
+			size = frame.getContentPane().getSize();
+		}
+		Game.FRAME_WIDTH = size.width;
+		Game.FRAME_HEIGHT = size.height;
+		minimized = !minimized;
+		frame.setVisible(true);
 	}
 		
 }

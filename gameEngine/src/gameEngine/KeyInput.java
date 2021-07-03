@@ -56,7 +56,11 @@ public class KeyInput extends KeyAdapter {
 			}
 			Game.paused = !Game.paused;
 		}
-
+		if(key == KeyEvent.VK_F11) {
+			Game.dontRender = true;
+			window.changeMinimize();
+			Game.dontRender = false;
+		}
 		
 	}
 	

@@ -37,24 +37,27 @@ public class MouseInput extends MouseAdapter {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if(Game.paused == false) {
-				currentX = e.getXOnScreen();
-				currentY = e.getYOnScreen();
-
-				Game.Pyaw -= ((currentX - lastX) * sensitivity);
-				Game.Ppitch -= ((currentY - lastY) * sensitivity);
-				robot.mouseMove(Game.monitorX, Game.monitorY);
-				
-				lastX = Game.monitorX;//Game.monitorX;
-				lastY = Game.monitorY;//Game.monitorY;				
-		}
+		checkMove(e);
 	}
 
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		checkMove(e);
+	}
+	
+	private void checkMove(MouseEvent e) {
+		if(Game.paused == false) {
+			currentX = e.getXOnScreen();
+			currentY = e.getYOnScreen();
+
+			Game.Pyaw -= ((currentX - lastX) * sensitivity);
+			Game.Ppitch -= ((currentY - lastY) * sensitivity);
+			robot.mouseMove(Game.monitorX, Game.monitorY);
+			
+			lastX = Game.monitorX;//Game.monitorX;
+			lastY = Game.monitorY;//Game.monitorY;		
+		}
 	}
 
 }

@@ -1,7 +1,9 @@
 package gameEngine;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 
 
@@ -12,7 +14,9 @@ public class Game extends Canvas implements Runnable  {
 	 * 
 	 */
 	private static final long serialVersionUID = 3997796135074783199L;
-	public static final int FRAME_WIDTH = 1800, FRAME_HEIGHT = 900; 
+	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public static int FRAME_WIDTH = (int) screenSize.getWidth();
+	public static int FRAME_HEIGHT = (int) screenSize.getHeight(); 
 	
 	public static int monitorX = 1920/2;
 	public static int monitorY = 1080/2;
@@ -31,6 +35,7 @@ public class Game extends Canvas implements Runnable  {
 	public static double scaling = FPS/30;
 	public static double sprint = 1;//(Game.FPS/Game.scaling);
 	public static boolean paused = false;
+	public static boolean dontRender = false;
 	
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
@@ -131,21 +136,23 @@ public class Game extends Canvas implements Runnable  {
 	}
 	
 	private void render() {
-		BufferStrategy bs = this.getBufferStrategy();
-		if(bs == null) {
-			this.createBufferStrategy(3);
-			return;
+		if(!dontRender) {
+			BufferStrategy bs = this.getBufferStrategy();
+			if(bs == null) {
+				this.createBufferStrategy(2);
+				return;
+			}
+			
+			Graphics g = bs.getDrawGraphics();
+			
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
+			
+			handler.render(g);
+			
+			g.dispose();
+			bs.show();
 		}
-		
-		Graphics g = bs.getDrawGraphics();
-		
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
-		
-		handler.render(g);
-		
-		g.dispose();
-		bs.show();
 	}
 	
 	
