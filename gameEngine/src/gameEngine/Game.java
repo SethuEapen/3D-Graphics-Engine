@@ -5,6 +5,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 
 
@@ -31,17 +36,18 @@ public class Game extends Canvas implements Runnable  {
 	public static double PyawVel = 0;
 	public static double PpitchVel = 0;
 	public static int FOV = 120;
-	public static double FPS = 120.0;
+	public static double FPS = 60.0;
 	public static double scaling = FPS/30;
 	public static double sprint = 1;//(Game.FPS/Game.scaling);
 	public static boolean paused = false;
 	public static boolean dontRender = false;
+	public static boolean frameFinished = true;
 	
 	int centerX = Game.FRAME_WIDTH/2;
 	int centerY = Game.FRAME_HEIGHT/2;
 
 	static Light[] lights = new Light[5];
-	
+	 
 	private Thread thread;
 	private boolean running = false;
 	private Handler handler;
@@ -56,12 +62,16 @@ public class Game extends Canvas implements Runnable  {
 		this.addMouseMotionListener(mouseInput);
 		
 		//add lights
-		lights[0] = new Light(-100,1000,-400, 10);
-		handler.addObject(new Dot(-100, 1000, -400, Color.red));
+		int lightx = -300;
+		int lighty = 100;
+		int lightz = -400;
+		lights[0] = new Light(lightx,lighty,lightz, 1000000);
+		handler.addObject(new Dot(lightx,lighty,lightz, Color.red));
 
 		//handler.addObject(new Box(50, 50, 50));
 		//handler.addObject(new Box(400, 200, 15, 70));
-		drawStuff();
+		//drawStuff();
+		readObjFile("C:\\Users\\Sethu\\Desktop\\Projects\\game engine\\Objects\\face.txt");
 		//handler.addObject(new Triangle(100, 200, 10, 300, 100, 30, 200, 40, 1000, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2, 300, Color.red));
@@ -114,7 +124,7 @@ public class Game extends Canvas implements Runnable  {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime =  now;
-			while(delta >= 1) {
+			while(delta >= 1 && frameFinished) {
 				tick();
 				delta--;
 			}
@@ -155,6 +165,47 @@ public class Game extends Canvas implements Runnable  {
 		}
 	}
 	
+	private boolean readObjFile(String path) {
+		try {
+			File file = new File(path);
+			Scanner scanner = new Scanner(file);
+			ArrayList<int[]> verts = new ArrayList<int[]>();
+			ArrayList<int[]> tris = new ArrayList<int[]>();
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				String[] data = line.split(" ");
+				if(data[0].equals("v")) {					
+					int[] vert = new int[3];
+					for(int i = 1; i < data.length; i++) {
+						vert[i-1] = (int)(Double.valueOf(data[i]) * 300);
+					}
+					verts.add(vert);
+				}
+				if(data[0].equals("f")) {
+					int[] tri = new int[3];
+					for(int i = 1; i < data.length; i++) {
+						tri[i-1] = Integer.valueOf(data[i]) - 1;
+					}
+					tris.add(tri);
+					//handler.addObject(new Triangle(verts.get(tri[0])[0], verts.get(tri[0])[1], verts.get(tri[0])[2], verts.get(tri[1])[0], verts.get(tri[1])[1], verts.get(tri[1])[2], verts.get(tri[2])[0], verts.get(tri[2])[1], verts.get(tri[2])[2], Color.red, false));
+				}
+			}
+			
+			//verts.forEach((n) -> System.out.println(Arrays.toString(n)));
+			//verts.forEach((vert) -> handler.addObject(new Dot(vert[0], vert[1], vert[2], Color.red)));
+			tris.forEach((tri) -> handler.addObject(new Triangle(verts.get(tri[0])[0], verts.get(tri[0])[1], verts.get(tri[0])[2], verts.get(tri[1])[0], verts.get(tri[1])[1], verts.get(tri[1])[2], verts.get(tri[2])[0], verts.get(tri[2])[1], verts.get(tri[2])[2], Color.red, false)));
+			//for(int[] tri : tris) {
+				//handler.addObject(new Triangle(verts.get(tri[0])[0], verts.get(tri[0])[1], verts.get(tri[0])[2], verts.get(tri[1])[0], verts.get(tri[1])[1], verts.get(tri[1])[2], verts.get(tri[2])[0], verts.get(tri[2])[1], verts.get(tri[2])[2], Color.red, false));
+			//}
+			
+			scanner.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			System.out.println("Error");
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	public static void main(String[] args) {
 		new Game();

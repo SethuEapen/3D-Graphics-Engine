@@ -61,7 +61,6 @@ public class KeyInput extends KeyAdapter {
 			window.changeMinimize();
 			Game.dontRender = false;
 		}
-		
+		if(key == KeyEvent.VK_F4) System.exit(0);	
 	}
-	
 }

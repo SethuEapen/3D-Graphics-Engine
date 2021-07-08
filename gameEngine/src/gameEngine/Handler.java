@@ -2,6 +2,7 @@ package gameEngine;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 
 public class Handler { //steps through all the game objects and updates them individually
@@ -9,8 +10,11 @@ public class Handler { //steps through all the game objects and updates them ind
 	ArrayList<GameObject> object = new ArrayList<GameObject>();
 	ArrayList<GameObject> sortedRender = new ArrayList<GameObject>();
 
+	int i = 1;
 	
 	public void tick() {
+		System.out.println(i);
+		i++;
 		Game.sprint = Game.sprint / Game.scaling;
 		
 		Game.Pyaw = (Game.Pyaw - (Game.PyawVel / Game.scaling));
@@ -46,14 +50,18 @@ public class Handler { //steps through all the game objects and updates them ind
 		//Thread thread = new Thread();
 
 		
-		for (GameObject tempObject : object) {
-			//Thread thread = new Thread(tempObject);
-			//thread.start();
-			tempObject.tick();
+		for (int i = 0; i < object.size(); i++) {
+			GameObject tempObject = object.get(i);
+			tempObject.tick();		
 			if(tempObject.normalDistance != -99999999) {
 				sortedRender.add(tempObject);
-			}			
+			}	
 		}
+		//for (GameObject tempObject : object) {
+			//Thread thread = new Thread(tempObject);
+			//thread.start();		
+		//}
+		
 		
 		Collections.sort(sortedRender);
 		
