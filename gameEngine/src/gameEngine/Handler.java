@@ -2,19 +2,26 @@ package gameEngine;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 public class Handler { //steps through all the game objects and updates them individually
 	
 	ArrayList<GameObject> object = new ArrayList<GameObject>();
 	ArrayList<GameObject> sortedRender = new ArrayList<GameObject>();
+	public static volatile int numFinished = 0;
+	
+	
+	ExecutorService pool = Executors.newFixedThreadPool(6);
 
 	int i = 1;
 	
 	public void tick() {
-		System.out.println(i);
-		i++;
+		//System.out.println(i);
+		//i++;
 		Game.sprint = Game.sprint / Game.scaling;
 		
 		Game.Pyaw = (Game.Pyaw - (Game.PyawVel / Game.scaling));
@@ -49,31 +56,47 @@ public class Handler { //steps through all the game objects and updates them ind
 
 		//Thread thread = new Thread();
 
+		Handler.numFinished = 0;
+
+
 		
 		for (int i = 0; i < object.size(); i++) {
 			GameObject tempObject = object.get(i);
-			tempObject.tick();		
+			pool.execute(tempObject);
+		}
+		
+		//while(Handler.numFinished <= (object.size()-1)) {
+			//System.out.println(numFinished + " v.s. " + (object.size()-1));
+			
+
+		//}
+		
+		
+		Handler.numFinished = 0;
+		
+		int asdf = object.size();
+	//	System.out.println("Objects size: " + asdf);
+
+		
+		for (int i = 0; i < object.size(); i++) {
+			GameObject tempObject = object.get(i);
 			if(tempObject.normalDistance != -99999999) {
 				sortedRender.add(tempObject);
 			}	
 		}
-		//for (GameObject tempObject : object) {
-			//Thread thread = new Thread(tempObject);
-			//thread.start();		
-		//}
 		
-		
-		Collections.sort(sortedRender);
 		
 		Game.sprint = Game.sprint * Game.scaling;
 	}
 	
 	
 	public void render(Graphics g) {
+		pool.notifyAll();
+		Collections.sort(sortedRender);
 		for (GameObject tempObject : sortedRender) {
 			tempObject.render(g);
 		}
-}
+	}
 	
 	public void addObject(GameObject object) {
 		this.object.add(object);
@@ -81,6 +104,16 @@ public class Handler { //steps through all the game objects and updates them ind
 	
 	public void removeObject(GameObject object) {
 		this.object.remove(object);
+	}
+
+
+	public ExecutorService getPool() {
+		return pool;
+	}
+
+
+	public void setPool(ExecutorService pool) {
+		this.pool = pool;
 	}
 
 }

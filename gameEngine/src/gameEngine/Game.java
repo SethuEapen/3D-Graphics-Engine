@@ -20,8 +20,8 @@ public class Game extends Canvas implements Runnable  {
 	 */
 	private static final long serialVersionUID = 3997796135074783199L;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public static int FRAME_WIDTH = (int) screenSize.getWidth();
-	public static int FRAME_HEIGHT = (int) screenSize.getHeight(); 
+	public static int FRAME_WIDTH = 600;//(int) screenSize.getWidth();
+	public static int FRAME_HEIGHT = 800;//(int) screenSize.getHeight(); 
 	
 	public static int monitorX = 1920/2;
 	public static int monitorY = 1080/2;
@@ -70,8 +70,8 @@ public class Game extends Canvas implements Runnable  {
 
 		//handler.addObject(new Box(50, 50, 50));
 		//handler.addObject(new Box(400, 200, 15, 70));
-		//drawStuff();
-		readObjFile("C:\\Users\\Sethu\\Desktop\\Projects\\game engine\\Objects\\face.txt");
+		drawStuff();
+		readObjFile("C:\\Users\\Sethu\\Desktop\\Projects\\game engine\\Objects\\suzanne.txt");
 		//handler.addObject(new Triangle(100, 200, 10, 300, 100, 30, 200, 40, 1000, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2, 300, Color.red));
@@ -138,6 +138,7 @@ public class Game extends Canvas implements Runnable  {
 				//frames = 0;
 			}
 		}
+		handler.getPool().shutdown();
 		stop();
 	}
 

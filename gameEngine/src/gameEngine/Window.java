@@ -41,9 +41,9 @@ public class Window extends Canvas { //creates the window
 		frame = new JFrame(title);
 		
 		//frame.setPreferredSize(new Dimension(width, height));
-		//frame.setSize(new Dimension(width, height));
+		frame.setSize(new Dimension(width, height));
 		
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		//frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		//frame.setUndecorated(true);
 		
 		//frame.setMaximumSize(new Dimension(width, height));

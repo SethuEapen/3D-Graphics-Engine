@@ -60,6 +60,8 @@ public class Triangle extends GameObject implements Runnable {
 	
 	@Override
 	public void tick() {
+		Handler.numFinished = Handler.numFinished + 1;
+		
 		distXN = x - Game.playerX;
 		distYN = Game.playerY - y;
 		distZN = z - Game.playerZ;
