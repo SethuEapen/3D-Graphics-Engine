@@ -30,7 +30,8 @@ public class KeyInput extends KeyAdapter {
 		if(key == KeyEvent.VK_LEFT) Game.PyawVel = -5;
 		if(key == KeyEvent.VK_UP) Game.PpitchVel = 5;
 		if(key == KeyEvent.VK_DOWN) Game.PpitchVel = -5;
-		
+		if(key == KeyEvent.VK_9) Game.PvelY = 5;
+		if(key == KeyEvent.VK_0) Game.PvelY = -5;
 	}
 	
 	public void keyReleased(KeyEvent e) {
@@ -48,6 +49,8 @@ public class KeyInput extends KeyAdapter {
 		if(key == KeyEvent.VK_LEFT) Game.PyawVel = 0;
 		if(key == KeyEvent.VK_UP) Game.PpitchVel = 0;
 		if(key == KeyEvent.VK_DOWN) Game.PpitchVel = 0;
+		if(key == KeyEvent.VK_0) Game.PvelY = 0;
+		if(key == KeyEvent.VK_9) Game.PvelY = 0;
 		if(key == KeyEvent.VK_ESCAPE) {
 			if(Game.paused == true) {
 				window.setBlankCursor();

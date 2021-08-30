@@ -12,10 +12,10 @@ public class Handler { //steps through all the game objects and updates them ind
 	
 	ArrayList<GameObject> object = new ArrayList<GameObject>();
 	ArrayList<GameObject> sortedRender = new ArrayList<GameObject>();
-	public static volatile int numFinished = 0;
+	public static int numFinished = 0;
 	
 	
-	ExecutorService pool = Executors.newFixedThreadPool(6);
+	ExecutorService pool = Executors.newFixedThreadPool(100);
 
 	int i = 1;
 	
@@ -54,7 +54,6 @@ public class Handler { //steps through all the game objects and updates them ind
 		
 		sortedRender.clear();
 
-		//Thread thread = new Thread();
 
 		Handler.numFinished = 0;
 
@@ -62,9 +61,20 @@ public class Handler { //steps through all the game objects and updates them ind
 		
 		for (int i = 0; i < object.size(); i++) {
 			GameObject tempObject = object.get(i);
+			//tempObject.tick();
 			pool.execute(tempObject);
 		}
 		
+		while(numFinished < object.size()){
+			try{
+			 Thread.sleep(2);
+			} 
+			catch(Exception e) {
+
+			}
+		}
+		numFinished = 0;
+
 		//while(Handler.numFinished <= (object.size()-1)) {
 			//System.out.println(numFinished + " v.s. " + (object.size()-1));
 			
@@ -91,8 +101,7 @@ public class Handler { //steps through all the game objects and updates them ind
 	
 	
 	public void render(Graphics g) {
-		pool.notifyAll();
-		Collections.sort(sortedRender);
+		//Collections.sort(sortedRender);
 		for (GameObject tempObject : sortedRender) {
 			tempObject.render(g);
 		}
@@ -106,7 +115,7 @@ public class Handler { //steps through all the game objects and updates them ind
 		this.object.remove(object);
 	}
 
-
+/*
 	public ExecutorService getPool() {
 		return pool;
 	}
@@ -115,7 +124,7 @@ public class Handler { //steps through all the game objects and updates them ind
 	public void setPool(ExecutorService pool) {
 		this.pool = pool;
 	}
-
+*/
 }
 
 //double modVelY = Math.sin(Math.toRadians(Game.Ppitch)) * modVelZ;

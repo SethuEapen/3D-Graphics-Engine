@@ -56,6 +56,7 @@ public class Triangle extends GameObject implements Runnable {
 	@Override
 	public void run() {
 		tick();
+		Handler.numFinished++;
 	}	
 	
 	@Override

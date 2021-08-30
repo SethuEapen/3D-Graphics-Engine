@@ -20,8 +20,8 @@ public class Game extends Canvas implements Runnable  {
 	 */
 	private static final long serialVersionUID = 3997796135074783199L;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public static int FRAME_WIDTH = 600;//(int) screenSize.getWidth();
-	public static int FRAME_HEIGHT = 800;//(int) screenSize.getHeight(); 
+	public static int FRAME_WIDTH = (int) screenSize.getWidth();
+	public static int FRAME_HEIGHT = (int) screenSize.getHeight(); 
 	
 	public static int monitorX = 1920/2;
 	public static int monitorY = 1080/2;
@@ -36,7 +36,7 @@ public class Game extends Canvas implements Runnable  {
 	public static double PyawVel = 0;
 	public static double PpitchVel = 0;
 	public static int FOV = 120;
-	public static double FPS = 60.0;
+	public static double FPS = 24.0;
 	public static double scaling = FPS/30;
 	public static double sprint = 1;//(Game.FPS/Game.scaling);
 	public static boolean paused = false;
@@ -62,23 +62,23 @@ public class Game extends Canvas implements Runnable  {
 		this.addMouseMotionListener(mouseInput);
 		
 		//add lights
-		int lightx = -300;
-		int lighty = 100;
-		int lightz = -400;
-		lights[0] = new Light(lightx,lighty,lightz, 1000000);
+		int lightx = -500;
+		int lighty = 200;
+		int lightz = 6800;
+		lights[0] = new Light(lightx,lighty,lightz, 10000);
 		handler.addObject(new Dot(lightx,lighty,lightz, Color.red));
 
 		//handler.addObject(new Box(50, 50, 50));
 		//handler.addObject(new Box(400, 200, 15, 70));
 		drawStuff();
-		readObjFile("C:\\Users\\Sethu\\Desktop\\Projects\\game engine\\Objects\\suzanne.txt");
+		readObjFile("/Users/sethueapen/Documents/Projects/3D-Graphics-Engine 2/face.txt");
 		//handler.addObject(new Triangle(100, 200, 10, 300, 100, 30, 200, 40, 1000, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2-100, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2-100, 300, Color.red));
 		//new Box(0,0,0,700,1000,700, Color.blue, handler);
-		new Box(200, 300, 100, 400, 300, 200, Color.blue, handler);
+		//new Box(200, 300, 100, 400, 300, 200, Color.blue, handler);
 
 		//handler.addObject(new Dot(200,300, 100+300, Color.green));
 		//handler.addObject(new Dot(150,250, 50+300, Color.green));
@@ -138,7 +138,7 @@ public class Game extends Canvas implements Runnable  {
 				//frames = 0;
 			}
 		}
-		handler.getPool().shutdown();
+		//handler.getPool().shutdown();
 		stop();
 	}
 
@@ -156,7 +156,7 @@ public class Game extends Canvas implements Runnable  {
 			
 			Graphics g = bs.getDrawGraphics();
 			
-			g.setColor(Color.DARK_GRAY);
+			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
 			
 			handler.render(g);

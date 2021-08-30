@@ -26,6 +26,7 @@ public class Dot extends GameObject implements Runnable {
 	@Override
 	public void run() {
 		tick();
+		Handler.numFinished++;
 	}
 	
 	@Override
