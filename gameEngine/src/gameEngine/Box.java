@@ -1,6 +1,8 @@
 package gameEngine;
 
 import java.awt.Color;
+import java.util.ArrayList;
+
 
 public class Box {
 
@@ -21,29 +23,34 @@ public class Box {
 		//clockwise is showing face
 		
 		//back face counter clockwise
+
+		ArrayList<GameObject> tempList = new ArrayList<GameObject>();
 		
-		handler.addObject(new Triangle(x, y, (z + width), (x + length), y, (z + width), x, (y + height), (z + width), color, false));
-		handler.addObject(new Triangle((x + length), (y + height), (z + width), x, (y + height), (z + width), (x + length), y, (z + width), color, false));
+		tempList.add(new Triangle(x, y, (z + width), (x + length), y, (z + width), x, (y + height), (z + width), color, false));
+		tempList.add(new Triangle((x + length), (y + height), (z + width), x, (y + height), (z + width), (x + length), y, (z + width), color, false));
 		
 		//left side counter clockwise
-		handler.addObject(new Triangle(x, y, z, x, y, (z + width), x, (y + height), z, Color.green, false));
-		handler.addObject(new Triangle(x, (y + height), (z + width), x, (y + height), z, x, y, (z + width), Color.green, false));
+		tempList.add(new Triangle(x, y, z, x, y, (z + width), x, (y + height), z, Color.green, false));
+		tempList.add(new Triangle(x, (y + height), (z + width), x, (y + height), z, x, y, (z + width), Color.green, false));
 
 		//right side counter clockwise
-		handler.addObject(new Triangle((x + length), y, z, (x + length), (y + height), z, (x + length), y, (z + width), Color.green, false));
-		handler.addObject(new Triangle((x + length), (y + height), (z + width), (x + length), y, (z + width), (x + length), (y + height), z, Color.green, false));
+		tempList.add(new Triangle((x + length), y, z, (x + length), (y + height), z, (x + length), y, (z + width), Color.green, false));
+		tempList.add(new Triangle((x + length), (y + height), (z + width), (x + length), y, (z + width), (x + length), (y + height), z, Color.green, false));
 		
 		//bottom face //counter clockwise
-		handler.addObject(new Triangle(x, y, z, (x + length), y, z, x, y, (z + width), Color.red, false));
-		handler.addObject(new Triangle((x + length), y, (z + width), x, y, (z + width), (x + length), y, z, Color.red, false));
+		tempList.add(new Triangle(x, y, z, (x + length), y, z, x, y, (z + width), Color.red, false));
+		tempList.add(new Triangle((x + length), y, (z + width), x, y, (z + width), (x + length), y, z, Color.red, false));
 
 		//top face clockwise
-		handler.addObject(new Triangle(x, (y + height), z, x, (y + height), (z + width), (x + length), (y + height), z, Color.red, false));
-		handler.addObject(new Triangle((x + length), (y + height), (z + width), (x + length), (y + height), z, x, (y + height), (z + width), Color.red, false));
+		tempList.add(new Triangle(x, (y + height), z, x, (y + height), (z + width), (x + length), (y + height), z, Color.red, false));
+		tempList.add(new Triangle((x + length), (y + height), (z + width), (x + length), (y + height), z, x, (y + height), (z + width), Color.red, false));
 
 		//front face clockwise
-		handler.addObject(new Triangle(x, y, z, x, (y + height), z, (x + length), y, z, color, false));
-		handler.addObject(new Triangle((x + length), (y + height), z, (x + length), y, z, x, (y + height), z, color, true));
+		tempList.add(new Triangle(x, y, z, x, (y + height), z, (x + length), y, z, color, false));
+		tempList.add(new Triangle((x + length), (y + height), z, (x + length), y, z, x, (y + height), z, color, true));
+
+		//ItemPair tempPair = new ItemPair(tempList, false);
+
 	}
 
 

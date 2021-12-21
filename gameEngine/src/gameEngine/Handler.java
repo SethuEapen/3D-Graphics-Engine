@@ -2,26 +2,35 @@ package gameEngine;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+
+import javax.annotation.processing.SupportedOptions;
 
 
 public class Handler { //steps through all the game objects and updates them individually
 	
-	ArrayList<GameObject> object = new ArrayList<GameObject>();
-	ArrayList<GameObject> sortedRender = new ArrayList<GameObject>();
+	ArrayList<ItemPair> pairs = new ArrayList<ItemPair>();
+	ArrayList<ItemPair> sortedRender = new ArrayList<ItemPair>();
+	ArrayList<ItemPair> tempRender = new ArrayList<ItemPair>();
+	int sorting = 0;
 	public static int numFinished = 0;
 	
 	
-	ExecutorService pool = Executors.newFixedThreadPool(100);
+	ExecutorService pool = Executors.newFixedThreadPool(8);
+	List<Future<?>> futures = new ArrayList<Future<?>>();
+	ExecutorService sortingThread = Executors.newFixedThreadPool(8);
+
 
 	int i = 1;
 	
 	public void tick() {
-		//System.out.println(i);
-		//i++;
+		//Movment Updating
+
 		Game.sprint = Game.sprint / Game.scaling;
 		
 		Game.Pyaw = (Game.Pyaw - (Game.PyawVel / Game.scaling));
@@ -39,7 +48,6 @@ public class Handler { //steps through all the game objects and updates them ind
 		}else if(Game.Ppitch <= -360) {
 			Game.Ppitch = Game.Ppitch + 360;
 		}
-		
 				
 		double modVelZ = Math.sin(Math.toRadians(90) + Math.toRadians(Game.Pyaw)) * Game.PvelZ;
 		double modVelX = Math.cos(Math.toRadians(90) + Math.toRadians(Game.Pyaw)) * Game.PvelZ;
@@ -52,83 +60,80 @@ public class Handler { //steps through all the game objects and updates them ind
 		Game.playerY = (Game.playerY + (Game.PvelY * Game.sprint));
 		Game.playerZ = (Game.playerZ + (modVelZ * Game.sprint));//Game.PvelZ;
 		
-		sortedRender.clear();
+		//Ended Movment 
+		//TickQueuing
 
+		//sortedRender.clear();
 
-		Handler.numFinished = 0;
-
-
-		
-		for (int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
-			//tempObject.tick();
-			pool.execute(tempObject);
-		}
-		
-		while(numFinished < object.size()){
-			try{
-			 Thread.sleep(2);
-			} 
-			catch(Exception e) {
-
+		if (sortedRender.isEmpty()) {
+			for (int i = 0; i < pairs.size(); i++) {// Set clone items into sorted render and excecute all of the ticks
+				ItemPair tempPair = pairs.get(i);
+				for(int j = 0; j < tempPair.list.size(); j++){
+					GameObject tempObject = tempPair.list.get(j);
+					pool.execute(tempObject);
+				}
+				sortedRender.add(tempPair);
+			}
+		} else if (sorting == 0) {
+			sorting = 1;
+			tempRender = new ArrayList<ItemPair>(sortedRender);
+			for (int i = 0; i < sortedRender.size(); i++) {
+				ItemPair tempPair = sortedRender.get(i);
+				for(int j = 0; j < tempPair.list.size(); j++){
+					GameObject tempObject = tempPair.list.get(j);
+					pool.execute(tempObject);
+				}
+			}
+			for (int i = 0; i < tempRender.size(); i++) {
+				ItemPair tempPair = tempRender.get(i);
+				Future<?> f = sortingThread.submit(tempPair);
+    			futures.add(f);
+			}
+		} else {
+			boolean allDone = true;
+			for(Future<?> future : futures){
+    			allDone &= future.isDone(); // check if future is done
+			}
+			if (allDone) {
+				sortedRender = tempRender;
+				sorting = 0;
+			}
+			for (int i = 0; i < sortedRender.size(); i++) {
+				ItemPair tempPair = sortedRender.get(i);
+				for(int j = 0; j < tempPair.list.size(); j++){
+					GameObject tempObject = tempPair.list.get(j);
+					pool.execute(tempObject);
+				}
 			}
 		}
+		
+		
 		numFinished = 0;
 
-		//while(Handler.numFinished <= (object.size()-1)) {
-			//System.out.println(numFinished + " v.s. " + (object.size()-1));
-			
-
-		//}
-		
-		
-		Handler.numFinished = 0;
-		
-		int asdf = object.size();
-	//	System.out.println("Objects size: " + asdf);
-
-		
-		for (int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
-			if(tempObject.normalDistance != -99999999) {
-				sortedRender.add(tempObject);
-			}	
-		}
-		
-		
 		Game.sprint = Game.sprint * Game.scaling;
 	}
 	
 	
 	public void render(Graphics g) {
-		//Collections.sort(sortedRender);
-		for (GameObject tempObject : sortedRender) {
-			tempObject.render(g);
+		for (int i = 0; i < sortedRender.size(); i++) {
+			ItemPair tempPair = sortedRender.get(i);
+			for(int j = 0; j < tempPair.list.size(); j++){
+				GameObject tempObject = tempPair.list.get(j);
+				tempObject.render(g);
+
+			}	
 		}
+		//Collections.sort(sortedRender);
+		//for (GameObject tempObject : sortedRender) {
+		//	tempObject.render(g);
+		//}
 	}
 	
-	public void addObject(GameObject object) {
-		this.object.add(object);
+	public void addPair(ItemPair pair) {
+		this.pairs.add(pair);
 	}
 	
-	public void removeObject(GameObject object) {
-		this.object.remove(object);
+	public void removeObject(GameObject pair) {
+		this.pairs.remove(pair);
 	}
-
-/*
-	public ExecutorService getPool() {
-		return pool;
-	}
-
-
-	public void setPool(ExecutorService pool) {
-		this.pool = pool;
-	}
-*/
 }
-
-//double modVelY = Math.sin(Math.toRadians(Game.Ppitch)) * modVelZ;
-		//modVelZ = Math.cos(Math.toRadians(Game.Pyaw)) * modVelZ;
-		
-		//modVelZ = modVelZ + (Math.sin(Math.toRadians(-Game.Ppitch)) * Game.PvelY);
-		//modVelY = modVelY - (Math.cos(Math.toRadians(-Game.Ppitch)) * Game.PvelY);

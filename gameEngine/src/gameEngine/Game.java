@@ -8,7 +8,6 @@ import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -66,12 +65,12 @@ public class Game extends Canvas implements Runnable  {
 		int lighty = 200;
 		int lightz = 6800;
 		lights[0] = new Light(lightx,lighty,lightz, 10000);
-		handler.addObject(new Dot(lightx,lighty,lightz, Color.red));
+		//handler.addObject(new Dot(lightx,lighty,lightz, Color.red));
 
 		//handler.addObject(new Box(50, 50, 50));
 		//handler.addObject(new Box(400, 200, 15, 70));
-		drawStuff();
-		readObjFile("/Users/sethueapen/Documents/Projects/3D-Graphics-Engine 2/face.txt");
+		//drawStuff();
+		readObjFile("/Users/sethueapen/Documents/Projects/3D-Graphics-Engine/face.txt");
 		//handler.addObject(new Triangle(100, 200, 10, 300, 100, 30, 200, 40, 1000, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2, FRAME_HEIGHT/2, 300, Color.red));
 		//handler.addObject(new Point(FRAME_WIDTH/2-100, FRAME_HEIGHT/2, 300, Color.red));
@@ -91,7 +90,7 @@ public class Game extends Canvas implements Runnable  {
 		for(int x = 0; x < 300; x = x + 50) {
 			for(int z = 0; z < 1000; z = z + 50) {
 				for(int y = 0; y < 500; y = y + 50) {
-					handler.addObject(new Dot(x, y, z, Color.red));
+					//handler.addObject(new Dot(x, y, z, Color.red));
 				}
 			}
 		}
@@ -119,7 +118,7 @@ public class Game extends Canvas implements Runnable  {
 		double ns = 1000000000 /amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
-		//int frames = 0;
+		int frames = 0;
 		while(running){//tick fucntion
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -130,12 +129,12 @@ public class Game extends Canvas implements Runnable  {
 			}
 			if(running)
 				render();
-			//frames++;
+			frames++;
 			
 			if(System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				//System.out.println("FPS: " + frames);
-				//frames = 0;
+				System.out.println("FPS: " + frames);
+				frames = 0;
 			}
 		}
 		//handler.getPool().shutdown();
@@ -191,10 +190,15 @@ public class Game extends Canvas implements Runnable  {
 					//handler.addObject(new Triangle(verts.get(tri[0])[0], verts.get(tri[0])[1], verts.get(tri[0])[2], verts.get(tri[1])[0], verts.get(tri[1])[1], verts.get(tri[1])[2], verts.get(tri[2])[0], verts.get(tri[2])[1], verts.get(tri[2])[2], Color.red, false));
 				}
 			}
-			
-			//verts.forEach((n) -> System.out.println(Arrays.toString(n)));
-			//verts.forEach((vert) -> handler.addObject(new Dot(vert[0], vert[1], vert[2], Color.red)));
-			tris.forEach((tri) -> handler.addObject(new Triangle(verts.get(tri[0])[0], verts.get(tri[0])[1], verts.get(tri[0])[2], verts.get(tri[1])[0], verts.get(tri[1])[1], verts.get(tri[1])[2], verts.get(tri[2])[0], verts.get(tri[2])[1], verts.get(tri[2])[2], Color.red, false)));
+
+			ArrayList<GameObject> tempList = new ArrayList<GameObject>();
+
+			tris.forEach((tri) -> tempList.add(new Triangle(verts.get(tri[0])[0], verts.get(tri[0])[1], verts.get(tri[0])[2], verts.get(tri[1])[0], verts.get(tri[1])[1], verts.get(tri[1])[2], verts.get(tri[2])[0], verts.get(tri[2])[1], verts.get(tri[2])[2], Color.red, false)));
+
+			ItemPair tempPair = new ItemPair(tempList, true);
+
+			handler.addPair(tempPair);
+
 			//for(int[] tri : tris) {
 				//handler.addObject(new Triangle(verts.get(tri[0])[0], verts.get(tri[0])[1], verts.get(tri[0])[2], verts.get(tri[1])[0], verts.get(tri[1])[1], verts.get(tri[1])[2], verts.get(tri[2])[0], verts.get(tri[2])[1], verts.get(tri[2])[2], Color.red, false));
 			//}
